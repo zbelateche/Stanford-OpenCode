@@ -30,6 +30,7 @@ def example_fun():
 # at the correct time.
 def example_fun_noblocks():
     # Need to call function_start() at the beginning of each function.
+    a = 0
     self_modify.function_start()
 
     a = 0
@@ -38,18 +39,14 @@ def example_fun_noblocks():
     # Need to store and reload global variables before and after replace_line
     # Need to return False on the line after replace_line
     new_line = 'a = {}'.format(1)
-    self_modify.user_variables['a'] = a
-    self_modify.replace_line(__file__, 35, new_line, 1)
+    self_modify.replace_line(__file__, 36, new_line, 1)
     if(self_modify.need_to_jump): return False
-    a = self_modify.user_variables['a']
 
     print("Modified first line")
 
-    new_line = 'a = {}'.format(2)
-    self_modify.user_variables['a'] = a
-    self_modify.replace_line(__file__, 58, new_line, 1)
+    new_line = 'a = {}'.format(a+2)
+    self_modify.replace_line(__file__, 55, new_line, 1)
     if(self_modify.need_to_jump): return False
-    a = self_modify.user_variables['a']
 
     print("Modified second line")
 
@@ -63,15 +60,11 @@ def example_fun_noblocks():
     # Reset the lines
 
     new_line = 'a = {}'.format(0)
-    self_modify.user_variables['a'] = a
-    self_modify.replace_line(__file__, 35, new_line, 1)
+    self_modify.replace_line(__file__, 36, new_line, 1)
     if(self_modify.need_to_jump): return False
-    a = self_modify.user_variables['a']
 
     new_line = 'a = {}'.format(0)
-    self_modify.user_variables['a'] = a
-    self_modify.replace_line(__file__, 58, new_line, 1)
+    self_modify.replace_line(__file__, 55, new_line, 1)
     if(self_modify.need_to_jump): return False
-    a = self_modify.user_variables['a']
 
     return True

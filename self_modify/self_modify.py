@@ -40,6 +40,10 @@ def replace_line(file, line, string, indent):
     global line_called
     line_called = caller.lineno + 2
 
+    global user_variables
+    caller = inspect.stack()[1][0]
+    user_variables = caller.f_locals
+
     time.sleep(1)
 
 # Jump to a spot in the function calling function_start
@@ -47,6 +51,8 @@ def replace_line(file, line, string, indent):
 def jump(lineno):
     frame = inspect.stack()[2][0]
     called_from = frame
+    for var, val in user_variables.items():
+        called_from.f_locals[var] = val
 
     def hook(frame, event, arg):
         if event == 'line' and frame == called_from:
